@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}История операций — Magma{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2 class="fw-bold mb-2">История операций</h2>
+    <p class="text-muted mb-0">Все начисления и списания баллов</p>
+</div>
+
+{% if transactions %}
+<div class="card">
+    <div class="list-group list-group-flush">
+        {% for transaction in transactions %}
+        <div class="rating-item">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        {% if transaction.transaction_type == 'earn' %}
+                            <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                 style="width: 40px; height: 40px; background-color: #d1fae5; color: #059669;">
+                                <i class="bi bi-plus-lg"></i>
+                            </div>
+                        {% else %}
+                            <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                 style="width: 40px; height: 40px; background-color: #fee2e2; color: #dc2626;">
+                                <i class="bi bi-dash-lg"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold">{{ transaction.team.name }}</h6>
+                        <small class="text-muted">{{ transaction.description }}</small>
+                    </div>
+                </div>
+                <div class="text-end">
+                    {% if transaction.transaction_type == 'earn' %}
+                        <span class="badge rounded-pill p-2" style="font-size: 0.95rem; background-color: #059669;">
+                            +{{ transaction.points }}
+                        </span>
+                    {% else %}
+                        <span class="badge rounded-pill p-2" style="font-size: 0.95rem; background-color: #dc2626;">
+                            -{{ transaction.points }}
+                        </span>
+                    {% endif %}
+                    <br>
+                    <small class="text-muted">{{ transaction.created_at|date:"d.m.Y H:i" }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <i class="bi bi-arrow-left-right"></i>
+        <h5 class="fw-bold">Операций пока нет</h5>
+        <p class="mb-0">Как только начнутся начисления или списания, они появятся здесь.</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

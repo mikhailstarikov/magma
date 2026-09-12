@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Балансы команд — Magma{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2 class="fw-bold mb-2">Балансы команд</h2>
+    <p class="text-muted mb-0">Текущий балльный баланс каждой команды</p>
+</div>
+
+{% if balances %}
+<div class="card">
+    <div class="list-group list-group-flush">
+        {% for balance in balances %}
+        <div class="rating-item">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-1 fw-bold">{{ balance.team.name }}</h5>
+                    <small class="text-muted">
+                        <i class="bi bi-clock-history"></i> Обновлено: {{ balance.updated_at|date:"d.m.Y H:i" }}
+                    </small>
+                </div>
+                <div class="text-end">
+                    <div class="mb-2">
+                        <span class="badge rounded-pill p-2" style="font-size: 0.95rem; background-color: #059669;">
+                            {{ balance.current_balance }} баллов
+                        </span>
+                    </div>
+                    <small class="text-muted d-block">
+                        Заработано: {{ balance.total_earned }} | Потрачено: {{ balance.total_spent }}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <i class="bi bi-wallet2"></i>
+        <h5 class="fw-bold">Балансы пока не созданы</h5>
+        <p class="mb-0">Как только команды начнут получать баллы, они появятся здесь.</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

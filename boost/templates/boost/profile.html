@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Мои достижения — Magma{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2 class="fw-bold mb-2">Мои достижения</h2>
+    <p class="text-muted mb-0">Все полученные ачивки</p>
+</div>
+
+{% if awards %}
+<div class="row g-3">
+    {% for award in awards %}
+    <div class="col-md-6">
+        <a href="{% url 'boost:achievement_detail' award.id %}" class="text-decoration-none">
+            <div class="card h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start mb-3">
+                        {% if award.achievement.image %}
+                            <img src="{{ award.achievement.image.url }}" 
+                                 class="rounded me-3" style="width: 64px; height: 64px; object-fit: cover;" alt="">
+                        {% else %}
+                            <div class="achievement-icon me-3">
+                                <i class="bi bi-award-fill"></i>
+                            </div>
+                        {% endif %}
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1 fw-bold text-dark">{{ award.achievement.name }}</h5>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar-event"></i> {{ award.awarded_at|date:"d.m.Y" }}
+                            </small>
+                        </div>
+                    </div>
+                    <p class="text-muted mb-0 small">
+                        {{ award.achievement.description|truncatewords:20 }}
+                    </p>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <i class="bi bi-award"></i>
+        <h5 class="fw-bold">Пока нет достижений</h5>
+        <p class="mb-0">Продолжай работать отлично, и первые ачивки скоро появятся!</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

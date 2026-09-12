@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Мои короткие ссылки — Magma{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2 class="fw-bold mb-2">Мои короткие ссылки</h2>
+    <p class="text-muted mb-0">Все созданные вами ссылки</p>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+{% endif %}
+
+<div class="mb-3">
+    <a href="{% url 'shortlinks:create' %}" class="btn btn-magma">
+        <i class="bi bi-plus-circle"></i> Создать новую ссылку
+    </a>
+</div>
+
+{% if links %}
+<div class="card">
+    <div class="list-group list-group-flush">
+        {% for link in links %}
+        <div class="list-group-item p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="flex-grow-1 me-3">
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge badge-magma rounded-pill me-2">{{ link.short_code }}</span>
+                        <small class="text-muted">
+                            <i class="bi bi-calendar-event"></i> {{ link.created_at|date:"d.m.Y H:i" }}
+                        </small>
+                        <small class="text-muted ms-2">
+                            <i class="bi bi-eye"></i> {{ link.clicks }} переходов
+                        </small>
+                    </div>
+                    <div class="text-truncate text-muted small" style="max-width: 600px;">
+                        {{ link.original_url }}
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'shortlinks:link_detail' link.short_code %}" class="btn btn-sm btn-outline-magma">
+                        Подробнее
+                    </a>
+                    <form method="post" action="{% url 'shortlinks:delete' link.short_code %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger" 
+                                onclick="return confirm('Удалить ссылку {{ link.short_code }}?')">
+                            <i class="bi bi-trash"></i> Удалить
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <i class="bi bi-link-45deg"></i>
+        <h5 class="fw-bold">Пока нет ссылок</h5>
+        <p class="mb-3">Создайте свою первую короткую ссылку!</p>
+        <a href="{% url 'shortlinks:create' %}" class="btn btn-magma">
+            <i class="bi bi-plus-circle"></i> Создать ссылку
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Короткая ссылка — Magma{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2 class="fw-bold mb-2">Информация о ссылке</h2>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+{% endif %}
+
+<div class="card" style="max-width: 700px;">
+    <div class="card-body p-4">
+        <div class="mb-3">
+            <div class="text-muted small mb-1">Короткий код:</div>
+            <div class="fw-bold fs-5">{{ short_link.short_code }}</div>
+        </div>
+        
+        <div class="mb-3">
+            <div class="text-muted small mb-1">Исходный URL:</div>
+            <div class="text-break">{{ short_link.original_url }}</div>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-6">
+                <div class="text-muted small">Переходов:</div>
+                <div class="fw-bold">{{ short_link.clicks }}</div>
+            </div>
+            <div class="col-6">
+                <div class="text-muted small">Создана:</div>
+                <div class="fw-bold">{{ short_link.created_at|date:"d.m.Y H:i" }}</div>
+            </div>
+        </div>
+        
+        <div class="d-grid gap-2">
+            <a href="{% url 'redirect' short_link.short_code %}" target="_blank" class="btn btn-magma">
+                <i class="bi bi-box-arrow-up-right"></i> Открыть короткую ссылку
+            </a>
+            <a href="{% url 'shortlinks:my_links' %}" class="btn btn-outline-magma">
+                <i class="bi bi-arrow-left"></i> Мои ссылки
+            </a>
+            {% if short_link.created_by == user %}
+            <form method="post" action="{% url 'shortlinks:delete' short_link.short_code %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger w-100" 
+                        onclick="return confirm('Удалить ссылку {{ short_link.short_code }}?')">
+                    <i class="bi bi-trash"></i> Удалить ссылку
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

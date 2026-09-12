@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Рейтинг команд — Magma{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2 class="fw-bold mb-2">Командный рейтинг</h2>
+    <p class="text-muted mb-0">Позиции команд в рамках текущих активностей</p>
+</div>
+
+{% if ratings %}
+<div class="card">
+    <div class="list-group list-group-flush">
+        {% for rating in ratings %}
+        <div class="rating-item {% if rating.team == user_team %}user-team{% endif %}">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <div class="me-3 text-center" style="width: 40px;">
+                        {% if rating.position == 1 %}
+                            <i class="bi bi-trophy-fill text-warning" style="font-size: 2rem;"></i>
+                        {% elif rating.position == 2 %}
+                            <i class="bi bi-trophy-fill text-secondary" style="font-size: 1.8rem;"></i>
+                        {% elif rating.position == 3 %}
+                            <i class="bi bi-trophy-fill" style="color: #cd7f32; font-size: 1.6rem;"></i>
+                        {% else %}
+                            <span class="text-muted fs-4 fw-bold">{{ rating.position }}</span>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h5 class="mb-1 fw-bold">{{ rating.team.name }}</h5>
+                        <small class="text-muted">
+                            <i class="bi bi-lightning-fill"></i> {{ rating.activity.name }}
+                        </small>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <span class="badge badge-magma rounded-pill p-2" style="font-size: 0.95rem;">
+                        {{ rating.points }} баллов
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <i class="bi bi-bar-chart"></i>
+        <h5 class="fw-bold">Рейтинг пока пуст</h5>
+        <p class="mb-0">Как только команды начнут набирать баллы, они появятся здесь.</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

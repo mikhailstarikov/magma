@@ -1,0 +1,307 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Magma{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --magma-primary: #0d9488;
+            --magma-primary-dark: #0f766e;
+            --magma-primary-light: #14b8a6;
+            --magma-bg: #f5f5f5;
+            --magma-sidebar-bg: #ffffff;
+            --magma-text: #1f2937;
+            --magma-text-muted: #6b7280;
+        }
+
+        body {
+            background-color: var(--magma-bg);
+            color: var(--magma-text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .navbar {
+            background-color: var(--magma-primary) !important;
+            box-shadow: 0 2px 8px rgba(13, 148, 136, 0.15);
+            height: 48px;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: white !important;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 48px;
+            width: 230px;
+            height: calc(100vh - 48px);
+            background-color: var(--magma-sidebar-bg);
+            border-right: 1px solid #e5e7eb;
+            overflow-y: auto;
+            padding: 16px 0;
+        }
+
+        .sidebar-profile {
+            padding: 0 16px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 16px;
+        }
+
+        .sidebar-profile-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--magma-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-profile-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--magma-text);
+        }
+
+        .sidebar-profile-team {
+            font-size: 0.85rem;
+            color: var(--magma-text-muted);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            color: var(--magma-text);
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu-item:hover {
+            background-color: #f3f4f6;
+            color: var(--magma-primary);
+        }
+
+        .sidebar-menu-item.active {
+            background-color: #f0fdfa;
+            color: var(--magma-primary);
+            border-left-color: var(--magma-primary);
+            font-weight: 600;
+        }
+
+        .sidebar-menu-item i {
+            font-size: 1.3rem;
+            margin-right: 12px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--magma-text-muted);
+            padding: 12px 16px 6px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .main-content {
+            margin-left: 230px;
+            margin-top: 48px;
+            padding: 24px;
+            min-height: calc(100vh - 48px);
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border-radius: 8px;
+        }
+
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid #e5e7eb;
+            border-radius: 8px 8px 0 0 !important;
+        }
+
+        .btn-magma {
+            background-color: var(--magma-primary);
+            border-color: var(--magma-primary);
+            color: white;
+        }
+
+        .btn-magma:hover {
+            background-color: var(--magma-primary-dark);
+            border-color: var(--magma-primary-dark);
+            color: white;
+        }
+
+        .btn-outline-magma {
+            color: var(--magma-primary);
+            border-color: var(--magma-primary);
+        }
+
+        .btn-outline-magma:hover {
+            background-color: var(--magma-primary);
+            color: white;
+        }
+
+        .badge-magma {
+            background-color: var(--magma-primary);
+        }
+
+        .achievement-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background-color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .rating-item {
+            padding: 16px;
+            border-bottom: 1px solid #e5e7eb;
+            transition: background-color 0.2s;
+        }
+
+        .rating-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .rating-item.user-team {
+            background-color: #f0fdfa;
+            border-left: 3px solid var(--magma-primary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--magma-text-muted);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark fixed-top">
+        <div class="container-fluid px-3">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="bi bi-fire"></i> Magma
+            </a>
+            <div class="d-flex align-items-center">
+                {% if user.is_authenticated %}
+                    <span class="text-white small me-3">
+                        <i class="bi bi-person-circle"></i> {{ user.first_name|default:user.username }}
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar">
+        {% block sidebar %}
+        <div class="sidebar-profile">
+            <div class="sidebar-profile-avatar">
+                {{ user.first_name|first|default:"?" }}
+            </div>
+            <div class="sidebar-profile-name">{{ user.get_full_name|default:user.username }}</div>
+            {% if employee and employee.team %}
+                <div class="sidebar-profile-team">
+                    <i class="bi bi-people-fill"></i> {{ employee.team.name }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="sidebar-section-title">Модули</div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="{% url 'home' %}" class="sidebar-menu-item {% if request.path == '/' %}active{% endif %}">
+                    <i class="bi bi-house-door-fill"></i>
+                    <span>Главная</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'boost:employee_profile' %}" class="sidebar-menu-item {% if 'profile' in request.path %}active{% endif %}">
+                    <i class="bi bi-award-fill"></i>
+                    <span>Мои достижения</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'boost:team_rating' %}" class="sidebar-menu-item {% if 'rating' in request.path %}active{% endif %}">
+                    <i class="bi bi-trophy-fill"></i>
+                    <span>Рейтинг команд</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'loyalty:team_balance' %}" class="sidebar-menu-item {% if 'balance' in request.path %}active{% endif %}">
+                    <i class="bi bi-wallet2"></i>
+                    <span>Балансы команд</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'loyalty:transactions' %}" class="sidebar-menu-item {% if 'transactions' in request.path %}active{% endif %}">
+                    <i class="bi bi-arrow-left-right"></i>
+                    <span>История операций</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'shortlinks:create' %}" class="sidebar-menu-item">
+                    <i class="bi bi-link-45deg"></i>
+                    <span>Короткие ссылки</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'shortlinks:my_links' %}" class="sidebar-menu-item {% if 'my_links' in request.path %}active{% endif %}">
+                    <i class="bi bi-list-ul"></i>
+                    <span>Мои ссылки</span>
+                </a>
+            </li>
+        </ul>
+
+        {% if user.is_staff %}
+        <div class="sidebar-section-title">АДМИНИСТРИРОВАНИЕ</div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="{% url 'admin:index' %}" class="sidebar-menu-item">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Админка</span>
+                </a>
+            </li>
+        </ul>
+        {% endif %}
+        {% endblock %}
+    </div>
+
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
