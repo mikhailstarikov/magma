@@ -166,3 +166,27 @@ python manage.py createsuperuser
 python manage.py runserver
 
 Откройте в браузере: <http://127.0.0.1:8000/>
+
+## 🧪 Тестирование
+
+Проект покрыт автоматическими тестами с использованием **pytest** и **pytest-django**.
+
+### Запуск тестов
+
+```bash
+pytest --cov=. --cov-report=html --cov-report=term -v
+
+Покрытие кода
+Общее покрытие: ~88%
+Модели: 96-100%
+Views: 62-100%
+Всего тестов: 38
+Структура тестов
+sigma/tests.py — тесты базовых сущностей (Team, Activity, Employee)
+boost/tests.py — тесты ачивок и рейтингов
+shortlinks/tests.py — тесты коротких ссылок
+loyalty_program/tests.py — тесты программы лояльности
+cherry/tests.py — тесты email-уведомлений
+test_views.py — интеграционные тесты всех страниц
+conftest.py — общие фикстуры для тестов
+```
